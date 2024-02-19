@@ -5,7 +5,7 @@ entity decoder is
 	port(I: in_std_logic_vector(1 down to 0);
 	     O: out_std_logic_vector(3 down to 0)
 	    );
-end test;
+end decoder;
 
 Architecture behavioural of decoder is
 begin
