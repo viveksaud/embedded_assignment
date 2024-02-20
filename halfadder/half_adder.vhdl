@@ -9,8 +9,17 @@ port(
 end half_adder;
 
 architecture behavior of half_adder is
-s<= A xor B;
-c<= A and B;
+begin
+	ha:process(a,b)
+	begin
+		if a='1' then
+		   s<= not b;
+		   c<= b;
+		else
+		   s<=b;
+		   c<= not b;
+		end if;
+	end process ha;
 end behavior;
- 
+		  
 
