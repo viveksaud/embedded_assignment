@@ -1,100 +1,64 @@
-library ieee;
-use ieee.std_logic_1164.all;
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
-entity sequence is
-	port(
-	CLK: in std_logic;
-	RST: in std_logic;
-	X: in std_logic;
-	Z: out std_logic
-);
-end sequence;
+entity Sequence_Detector is
+    Port ( clk : in STD_LOGIC;
+           reset : in STD_LOGIC;
+           input_bit : in STD_LOGIC;
+           sequence_detected : out STD_LOGIC);
+end Sequence_Detector;
 
-architecture sequenceArch of sequence is
-	type state is (Q0,Q1,Q2,Q3,Q4);
-	signal currentState, nextState: state;
+architecture Behavioral of Sequence_Detector is
+    type state_type is (IDLE, S1, S10, S101, S1011);
+    signal state, next_state : state_type;
 
 begin
-	seq_proc: process(CLK,RST) is
-begin
+    process(clk, reset)
+    begin
+        if reset = '1' then
+            state <= IDLE;
+        elsif rising_edge(clk) then
+            state <= next_state;
+        end if;
+    end process;
 
-If(RST='1') then
-	currentState <=Q0;
-elsif(rising_edge(CLK)) then
-	currentState <= nextState;
-end if;
-
-end process seq_proc;
-
-comb_proc: process(currentState,X) is
-begin
-
-case(currentState) is
-
-	when Q0 =>
-		if (X='1') then
-			--"1"
-			nextState <= Q1;--
-		else
-			nextState <=Q0;
-		end if;
-
-	when Q1 =>
-		if(X='0') then
-		-- "10"
-			nextState <= Q2;
-		else
-			nextState <= Q1;
-		end if;
-
-	when Q2 =>
-		if(X='1') then 
-			--"101"
-			nextState <= Q3;
-		else
-			nextState <=Q0;
-		end if;
-
-	when Q3 =>
-		if (X='1') then
-			--"1011"
-			nextState <=Q4;
-		else 
-			nextState <= Q0;
-		end if ;
-
-	when Q4 =>
-		if (X='0') then
-			nextState <= Q0;
-		else
-			nextState <= Q1;
-		end if;
-	
-	end case;
-end process comb_proc;
-
---Output logic of the sequence dectector
-out_proc: process(currentState) is
-begin
-	case currentState is 
-		when Q0 =>
-		Z <= '0';
-
-	        when Q1 =>
-		Z <= '0';
-
-		when Q2 =>
-		Z <='0';
-
-        	when Q3 =>
-		Z <= '0';
-
-        	when Q4 =>
-		Z <= '1';
-
-end case;
-end process out_proc;
-end sequenceArch;
-
-	
-
+    process(state, input_bit)
+    begin
+        case state is
+            when IDLE =>
+                if input_bit = '1' then
+                    next_state <= S1;
+                else
+                    next_state <= IDLE;
+                end if;
+            when S1 =>
+                if input_bit = '0' then
+                    next_state <= S10;
+                else
+                    next_state <= S1;
+                end if;
+            when S10 =>
+                if input_bit = '1' then
+                    next_state <= S101;
+                else
+                    next_state <= IDLE;
+                end if;
+            when S101 =>
+                if input_bit = '1' then
+                    next_state <= S1011;
+                else
+                    next_state <= S10;
+                end if;
+            when S1011 =>
+                if input_bit = '1' then
+                    sequence_detected <= '1';
+                    next_state <= S1;
+                else
+                    sequence_detected <= '1';
+                    next_state <= S10;
+                end if;
+        end case;
+    end process;
+end Behavioral;
