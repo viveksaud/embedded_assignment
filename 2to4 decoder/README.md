@@ -2,7 +2,7 @@
 
 ## ss of 1to8 Mux output wave
 
-![2to4 decoder](../ss/1to8mux.png)
+![2to4 decoder](../1to8mux.png)
 
 ## diagram
 
