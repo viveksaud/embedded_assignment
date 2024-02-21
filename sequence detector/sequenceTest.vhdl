@@ -1,57 +1,86 @@
-library ieee;
-use ieee.std_logic_1164.all;
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
 
-entity testbench is
-end testbench;
+ENTITY sequence_1011_detector IS
+END sequence_1011_detector;
 
-Architecture testArch of testbench is
-	component sequence
-		port(
-		     CLK : in std_logic;
-		     RST : in std_logic;
-		     X : in std_logic;
-		     Z : out std_logic
-		    );
-end component;
+ARCHITECTURE behavior OF sequence_1011_detector IS
 
-	signal CLK, RST,X : std_logic :='0';
-	signal Z : std_logic;
+    COMPONENT Sequence_Detector
+    PORT(
+         clk : IN  std_logic;
+         reset : IN  std_logic;
+         input_bit : IN  std_logic;
+         sequence_detected : OUT  std_logic
+        );
+    END COMPONENT;
 
-constant CLK_period : time := 10 ns;
-begin
-	uut: sequence port map (CLK => CLK, RST => RST, X => X, Z => Z);
-	CLK_process : process
-begin
+   --Inputs
+   signal clk : std_logic := '0';
+   signal reset : std_logic := '0';
+   signal input_bit : std_logic := '0';
 
-	CLK <= '0';
-	wait for CLK_period/2;
-	CLK <= '1';
-	wait for CLK_period/2;
+   --Outputs
+   signal sequence_detected : std_logic;
 
-end process;
---stimulus process
-stimulus_proc: process
-begin
-	X <= '0';
-	RST <= '1';
-	wait for 30 ns;
-	RST <= '0';
-	wait for 40 ns;
-	X <= '1';
-	wait for 10 ns;
-	X <= '0';
-        wait for 10 ns;
-	X <= '1';
-	wait for 10 ns;
-	X <= '1';
-	wait for 10 ns;
-	X <= '0';
-	wait for 10 ns;
-	X <= '0';
-	-- insert stimulus here
-	wait;
-end process stimulus_proc;
-end testArch;
+   -- Clock period definitions
+   constant clk_period : time := 10 ns;
 
+BEGIN
 
-	
+    -- Instantiate the Unit Under Test (UUT)
+   uut: Sequence_Detector PORT MAP (
+          clk => clk,
+          reset => reset,
+          input_bit => input_bit,
+          sequence_detected => sequence_detected
+        );
+
+   -- Clock process definitions
+   clk_process : process
+   begin
+        while true loop
+            clk <= '0';
+            wait for clk_period/2;
+            clk <= '1';
+            wait for clk_period/2;
+        end loop;
+   end process;
+
+   -- Stimulus process
+   stim_proc: process
+   begin
+      -- hold reset state for 100 ns.
+      wait for 100 ns;	
+
+      -- Apply stimulus
+      input_bit <= '1';
+      wait for clk_period;
+      input_bit <= '0';
+      wait for clk_period;
+      input_bit <= '1';
+      wait for clk_period;
+      input_bit <= '1';
+      wait for clk_period;
+      input_bit <= '0';
+      wait for clk_period;
+      input_bit <= '1';
+      wait for clk_period;
+      input_bit <= '0';
+      wait for clk_period;
+      input_bit <= '1';
+      wait for clk_period;
+      input_bit <= '1';
+      wait for clk_period;
+      input_bit <= '0';
+      wait for clk_period;
+      input_bit <= '1';
+      wait for clk_period;
+      input_bit <= '1';
+      wait for clk_period;
+
+      -- End simulation
+      wait;
+   end process;
+
+END;
