@@ -1,6 +1,6 @@
 # VHDL Sequence Detector Library
 
-This VHDL library includes a simple Sequence Detector module (`sequence`) and a corresponding testbench (`sequence_tb`). The `sequence` module detects a specific sequence of data input (`data_in`) and indicates the detection through the output signal (`sequence_detected`). The detection is based on a state machine with states (`IDLE`, `S1`, `S10`, `S101`, `DETECTED`).
+This VHDL library includes a simple Sequence Detector module (`sequence`) and a corresponding testbench (`sequence_tb`). The `sequence` module detects a specific sequence of data input (`data_in`) and indicates the detection through the output signal (`sequence_detected`). The detection is based on a state machine with states (`IDLE`, `S1`, `S10`, `S101`, `s1011`).
 
 ## Files:
 
@@ -42,4 +42,7 @@ Each test case simulates different sequence detection scenarios.
 ![Screenshot from 2024-02-20 21-31-33](https://github.com/MohitReezal/Embedded-practical/assets/140707863/3958cb7e-07fd-4ba5-a48b-38ae819a4930)
 
 Finite state machine for sequence detector(Mealy State Machine)
-![Screenshot from 2024-02-20 21-32-08](https://github.com/MohitReezal/Embedded-practical/assets/140707863/8444c1a4-4449-435c-8d7a-be0d7c4e9ab6)
+![Screenshot from 2024-02-20 21-32-08](https://github.com/viveksaud/embedded_assignment/blob/main/sddd.png)
+
+output waveform:
+![ss of output waveform](https://github.com/viveksaud/embedded_assignment/blob/main/sd.png)
